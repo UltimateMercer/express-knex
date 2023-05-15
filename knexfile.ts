@@ -40,11 +40,11 @@ const config: { [key: string]: Knex.Config } = {
   production: {
     client: "pg",
     connection: {
-      database: process.env.DATABASE_NAME,
-      user: process.env.POSTGRES_USER,
-      password: process.env.POSTGRES_PASSWORD,
+      database: process.env.DATABASE_NAME || "management",
+      user: process.env.POSTGRES_USER || "root",
+      password: process.env.POSTGRES_PASSWORD || "senha5",
       port: 5432,
-      host: process.env.POSTGRES_HOST,
+      host: process.env.POSTGRES_HOST || "localhost",
     },
     migrations: {
       directory: "./src/database/migrations",
