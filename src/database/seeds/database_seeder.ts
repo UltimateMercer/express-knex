@@ -35,9 +35,9 @@ const data = {
   comments: [uuid(), uuid()],
 };
 
-export async function seed(knex: Knex): Promise<void> {
-  // Inserts seed entries
-  await knex(TableNames.ROLES).insert([
+const executeRolesTrx = async (trx: Knex) => {
+  await trx(TableNames.ROLES).del();
+  await trx(TableNames.ROLES).insert([
     { id: data.roles.manager, title: "Manager" },
     { id: data.roles.tech_lead, title: "Tech Lead" },
     {
@@ -46,8 +46,11 @@ export async function seed(knex: Knex): Promise<void> {
     },
     { id: data.roles.back_end, title: "Back-end Developer" },
   ]);
+};
 
-  await knex(TableNames.USERS).insert([
+const executeUsersTrx = async (trx: Knex) => {
+  await trx(TableNames.USERS).del();
+  await trx(TableNames.USERS).insert([
     {
       id: data.users.ultimatemercer,
       name: "Ultimate Mercer",
@@ -89,8 +92,11 @@ export async function seed(knex: Knex): Promise<void> {
       role_id: data.roles.front_end,
     },
   ]);
+};
 
-  await knex(TableNames.ORGANIZATIONS).insert([
+const executeOrganizationsTrx = async (trx: Knex) => {
+  await trx(TableNames.ORGANIZATIONS).del();
+  await trx(TableNames.ORGANIZATIONS).insert([
     {
       id: data.organizations.blklight,
       name: "Blklight",
@@ -106,8 +112,11 @@ export async function seed(knex: Knex): Promise<void> {
       manager_id: data.users.sashawatson,
     },
   ]);
+};
 
-  await knex(TableNames.PROJECTS).insert([
+const executeProjectsTrx = async (trx: Knex) => {
+  await trx(TableNames.PROJECTS).del();
+  await trx(TableNames.PROJECTS).insert([
     {
       id: data.projects.manofthematch,
       name: "#ManOfTheMatch",
@@ -125,8 +134,11 @@ export async function seed(knex: Knex): Promise<void> {
       organization_id: data.organizations.ultimates,
     },
   ]);
+};
 
-  await knex(TableNames.TEAMS).insert([
+const executeTeamsTrx = async (trx: Knex) => {
+  await trx(TableNames.TEAMS).del();
+  await trx(TableNames.TEAMS).insert([
     {
       id: data.teams.devcorporation,
       name: "Dev Corporation",
@@ -134,8 +146,11 @@ export async function seed(knex: Knex): Promise<void> {
       organization_id: data.organizations.blklight,
     },
   ]);
+};
 
-  await knex(TableNames.TEAM_MEMBERS).insert([
+const executeTeamMembersTrx = async (trx: Knex) => {
+  await trx(TableNames.TEAM_MEMBERS).del();
+  await trx(TableNames.TEAM_MEMBERS).insert([
     {
       team_id: data.teams.devcorporation,
       member_id: data.users.emmagrey,
@@ -145,8 +160,11 @@ export async function seed(knex: Knex): Promise<void> {
       member_id: data.users.sashawatson,
     },
   ]);
+};
 
-  await knex(TableNames.TASKS).insert([
+const executeTasksTrx = async (trx: Knex) => {
+  await trx(TableNames.TASKS).del();
+  await trx(TableNames.TASKS).insert([
     {
       id: data.tasks[0],
       title: "Create an API",
@@ -198,16 +216,22 @@ export async function seed(knex: Knex): Promise<void> {
       project_id: data.projects.matchmaker,
     },
   ]);
+};
 
-  await knex(TableNames.RELEASES).insert([
+const executeReleasesTrx = async (trx: Knex) => {
+  await trx(TableNames.RELEASES).del();
+  await trx(TableNames.RELEASES).insert([
     {
       id: data.releases[0].id,
       name: "1.0.0",
       project_id: data.projects.manofthematch,
     },
   ]);
+};
 
-  await knex(TableNames.TASKS_RELEASE).insert([
+const executeTasksRelease = async (trx: Knex) => {
+  await trx(TableNames.TASKS_RELEASE).del();
+  await trx(TableNames.TASKS_RELEASE).insert([
     {
       task_id: data.tasks[0],
       release_id: data.releases[0].id,
@@ -225,8 +249,11 @@ export async function seed(knex: Knex): Promise<void> {
       release_id: data.releases[0].id,
     },
   ]);
+};
 
-  await knex(TableNames.COMMENTS).insert([
+const executeCommentsTrx = async (trx: Knex) => {
+  await trx(TableNames.COMMENTS).del();
+  await trx(TableNames.COMMENTS).insert([
     {
       id: data.comments[0],
       content:
@@ -242,4 +269,23 @@ export async function seed(knex: Knex): Promise<void> {
       task_id: data.tasks[0],
     },
   ]);
+};
+
+export async function seed(knex: Knex): Promise<void> {
+  try {
+    await knex.transaction(async (trx) => {
+      await executeRolesTrx(trx);
+      await executeUsersTrx(trx);
+      await executeOrganizationsTrx(trx);
+      await executeProjectsTrx(trx);
+      await executeTeamsTrx(trx);
+      await executeTeamMembersTrx(trx);
+      await executeTasksTrx(trx);
+      await executeReleasesTrx(trx);
+      await executeTasksRelease(trx);
+      await executeCommentsTrx(trx);
+    });
+  } catch (error) {
+    console.error(error);
+  }
 }

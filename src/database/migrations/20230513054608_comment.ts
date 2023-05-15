@@ -18,7 +18,7 @@ export async function up(knex: Knex): Promise<void> {
         .references("tasks.id")
         .onUpdate("CASCADE")
         .onDelete("CASCADE");
-      table.timestamps();
+      table.timestamps(true, true);
     })
     .then(() => {
       console.log(`### Created table: ${TableNames.COMMENTS}`);

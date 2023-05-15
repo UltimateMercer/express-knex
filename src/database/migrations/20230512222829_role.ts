@@ -11,7 +11,7 @@ export async function up(knex: Knex): Promise<void> {
         .index()
         .defaultTo(knex.raw("uuid_generate_v4()"));
       table.text("title").notNullable().index();
-      table.timestamps();
+      table.timestamps(true, true);
     })
     .then(() => {
       console.log(`### Created table: ${TableNames.ROLES}`);
