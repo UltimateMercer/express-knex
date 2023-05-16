@@ -1,6 +1,7 @@
 import { TableNames } from "../eTableNames";
 import { Knex } from "knex";
 import { v4 as uuid } from "uuid";
+import crypto from "crypto";
 
 const data = {
   roles: {
@@ -35,6 +36,8 @@ const data = {
   comments: [uuid(), uuid()],
 };
 
+const hash_token = crypto.randomBytes(64).toString("base64");
+
 const executeRolesTrx = async (trx: Knex) => {
   await trx(TableNames.ROLES).del();
   await trx(TableNames.ROLES).insert([
@@ -56,7 +59,10 @@ const executeUsersTrx = async (trx: Knex) => {
       name: "Ultimate Mercer",
       username: "UltimateMercer",
       email: "ultimatemercer.blklight@gmail.com",
-      password: "senha5",
+      password: crypto
+        .pbkdf2Sync("senha5", hash_token, 1000, 64, "sha512")
+        .toString("base64"),
+      hash_token: hash_token,
       avatar: "https://i.imgur.com/h4BIIOc.jpg",
       description: "Blklight Creator",
       role_id: data.roles.manager,
@@ -66,7 +72,10 @@ const executeUsersTrx = async (trx: Knex) => {
       name: "Sasha Watson",
       username: "SashaWatson",
       email: "sashawatson.blklight@gmail.com",
-      password: "senha5",
+      password: crypto
+        .pbkdf2Sync("senha5", hash_token, 1000, 64, "sha512")
+        .toString("base64"),
+      hash_token: hash_token,
       avatar: "https://i.imgur.com/qOEajoe.jpg",
       description: "Blklight Tech Lead",
       role_id: data.roles.tech_lead,
@@ -76,7 +85,10 @@ const executeUsersTrx = async (trx: Knex) => {
       name: "Alex J. Mercer",
       username: "AlexJMercer",
       email: "alexjmercer.blklight@gmail.com",
-      password: "senha5",
+      password: crypto
+        .pbkdf2Sync("senha5", hash_token, 1000, 64, "sha512")
+        .toString("base64"),
+      hash_token: hash_token,
       avatar: "https://i.imgur.com/VTAHBAZ.jpg",
       description: "Blklight Back-end Developer",
       role_id: data.roles.back_end,
@@ -86,7 +98,10 @@ const executeUsersTrx = async (trx: Knex) => {
       name: "Emma Grey",
       username: "EmmaGrey",
       email: "emmagrey.blklight@gmail.com",
-      password: "senha5",
+      password: crypto
+        .pbkdf2Sync("senha5", hash_token, 1000, 64, "sha512")
+        .toString("base64"),
+      hash_token: hash_token,
       avatar: "https://i.imgur.com/2XLydEm.jpg",
       description: "Blklight Front-end Developer",
       role_id: data.roles.front_end,

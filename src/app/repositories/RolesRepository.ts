@@ -5,7 +5,9 @@ import { IRole } from "@/src/database/models";
 class RolesRepository {
   async findAll(orderBy: any = "ASC") {
     const direction = orderBy?.toUpperCase() === "DESC" ? "DESC" : "ASC";
-    const rows = await Knex<IRole>(TableNames.ROLES).select().orderBy('title', direction);
+    const rows = await Knex<IRole>(TableNames.ROLES)
+      .select()
+      .orderBy("title", direction);
     return rows;
   }
 
@@ -14,14 +16,14 @@ class RolesRepository {
     return row;
   }
 
-  async create(title: Omit<IRole, "id">) {
+  async create({ title }: Omit<IRole, "id">) {
     const [row] = await Knex.insert({ title: title })
       .into(TableNames.ROLES)
       .returning("*");
     return row;
   }
 
-  async update(id: string, title: Omit<IRole, "id">) {
+  async update(id: string, { title }: Omit<IRole, "id">) {
     const [row] = await Knex(TableNames.ROLES)
       .where({ id: id })
       .update({
@@ -37,4 +39,4 @@ class RolesRepository {
   }
 }
 
-export default new RolesRepository;
+export default new RolesRepository();
