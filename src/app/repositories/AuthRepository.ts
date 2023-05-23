@@ -15,16 +15,15 @@ class AuthRepository {
 
   async authUser(login: string) {
     const [row] = await Knex(TableNames.USERS)
+      .where(`${TableNames.USERS}.username`, login)
+      .orWhere(`${TableNames.USERS}.email`, login)
       .select(
         `${TableNames.USERS}.id`,
         `${TableNames.USERS}.username`,
         `${TableNames.USERS}.email`,
         `${TableNames.USERS}.password`,
         `${TableNames.USERS}.hash_token`
-      )
-      .where(login, "=", `${TableNames.USERS}.username`)
-      .orWhere(login, "=", `${TableNames.USERS}.email`);
-
+      );
     return row;
   }
 }

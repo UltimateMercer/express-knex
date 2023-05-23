@@ -10,7 +10,7 @@ import UsersRepository from "../repositories/UsersRepository";
 class AuthController {
   async login(req: Request, res: Response) {
     const { login, password } = req.body;
-
+    // res.json({ login, password });
     const authData = await AuthRepository.authUser(login);
 
     if (!authData) {
@@ -36,11 +36,11 @@ class AuthController {
     );
 
     const user = {
-      userData,
+      ...userData,
       token: token,
     };
 
-    return user;
+    res.json(user);
   }
 
   async logout() {}
