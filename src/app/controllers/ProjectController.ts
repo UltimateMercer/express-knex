@@ -7,6 +7,17 @@ class ProjectController {
     const projects = await ProjectsRepository.findAll(orderBy);
     res.json(projects);
   }
+
+  async showProjectsByUser(req: Request, res: Response) {
+    const { id } = req.params;
+
+    const projects = await ProjectsRepository.findByUser(id);
+
+    if (!projects) {
+      return res.status(404).json({ error: "Projects not found!" });
+    }
+    res.json(projects);
+  }
 }
 
 export default new ProjectController();

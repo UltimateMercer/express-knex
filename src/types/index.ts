@@ -13,8 +13,19 @@ export type PriorityField =
   | "heavy high";
 
 export type LabelField =
-  | "backlog"
-  | "todo"
-  | "in progress"
-  | "done"
-  | "canceled";
+  | "feature"
+  | "bug"
+  | "enhancement"
+  | "documentation"
+  | "design"
+  | "question"
+  | "maintenance";
+
+export type OrderBy =
+  | "ASC"
+  | "DESC"
+  | "Asc"
+  | "Desc"
+  | "asc"
+  | "desc"
+  | undefined;

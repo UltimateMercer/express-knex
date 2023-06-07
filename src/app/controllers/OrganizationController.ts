@@ -7,6 +7,17 @@ class OrganizationController {
     const organizations = await OrganizationsRepository.findAll(orderBy);
     res.json(organizations);
   }
+
+  async showOrganizationsByUser(req: Request, res: Response) {
+    const { id } = req.params;
+
+    const organizations = await OrganizationsRepository.findByUser(id);
+
+    if (!organizations) {
+      return res.status(404).json({ error: "Organizations not found!" });
+    }
+    res.json(organizations);
+  }
 }
 
 export default new OrganizationController();
