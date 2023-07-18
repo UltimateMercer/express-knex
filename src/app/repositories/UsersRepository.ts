@@ -3,6 +3,7 @@ import { Knex } from "../../database/knex";
 import { IUser } from "@/src/database/models";
 
 type GetUser = Omit<IUser, "password" | "hash_token">;
+type User = Omit<IUser, "id">;
 
 class UsersRepository {
   async findAll(orderBy: any = "ASC") {
@@ -88,6 +89,47 @@ class UsersRepository {
       .select(`${TableNames.ROLES}.title as role`)
       .where(`${TableNames.USERS}.email`, "=", email);
     return row;
+  }
+
+  async create({
+    name,
+    username,
+    email,
+    avatar,
+    description,
+    password,
+    role_id,
+  }: User) {
+    const row = await Knex<User>(TableNames.USERS)
+      .insert({
+        name,
+        username,
+        email,
+        avatar,
+        description,
+        password,
+        role_id,
+      })
+      .returning("email");
+    return row;
+  }
+
+  async update(
+    id: string,
+    { name, username, email, avatar, description, password, role_id }: User
+  ) {
+    const [row] = await Knex<User>(TableNames.USERS)
+      .update({
+        name,
+        username,
+        email,
+        avatar,
+        description,
+        password,
+        role_id,
+      })
+      .where("id", id)
+      .returning("email");
   }
 }
 

@@ -7,6 +7,8 @@ import OrganizationController from "./app/controllers/OrganizationController";
 import ProjectController from "./app/controllers/ProjectController";
 import TaskController from "./app/controllers/TaskController";
 
+import { validateRoute } from "./app/middleware/auth";
+
 const router = Router();
 
 router.post("/login", AuthController.login);
