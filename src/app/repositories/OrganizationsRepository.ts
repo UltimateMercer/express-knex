@@ -8,7 +8,7 @@ class OrganizationsRepository {
     const rows = await Knex<IOrgarnization[]>(TableNames.ORGANIZATIONS)
       .leftJoin(
         TableNames.USERS,
-        `${TableNames.ORGANIZATIONS}.manager_id`,
+        `${TableNames.ORGANIZATIONS}.user_manager_id`,
         `${TableNames.USERS}.id`
       )
       .leftJoin(
@@ -38,7 +38,7 @@ class OrganizationsRepository {
       .select(`${TableNames.ROLES}.title as manager_role`)
       .leftJoin(
         TableNames.USERS,
-        `${TableNames.ORGANIZATIONS}.manager_id`,
+        `${TableNames.ORGANIZATIONS}.user_manager_id`,
         `${TableNames.USERS}.id`
       )
       .leftJoin(
@@ -46,7 +46,7 @@ class OrganizationsRepository {
         `${TableNames.USERS}.role_id`,
         `${TableNames.ROLES}.id`
       )
-      .where(`${TableNames.ORGANIZATIONS}.manager_id`, userId);
+      .where(`${TableNames.ORGANIZATIONS}.user_manager_id`, userId);
     return rows;
   }
 }

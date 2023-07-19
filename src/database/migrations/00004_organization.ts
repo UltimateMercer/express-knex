@@ -10,12 +10,15 @@ export async function up(knex: Knex): Promise<void> {
         .unique()
         .index()
         .defaultTo(knex.raw("uuid_generate_v4()"));
-      table.text("name").notNullable().unique().index();
+      table.text("name").notNullable().index();
+      table.text("orgname").notNullable().unique().index();
+      table.text("email").notNullable().index();
       table.text("logo").nullable();
       table.text("description").notNullable().defaultTo("");
+      table.text("invitation_code").nullable().defaultTo("");
       table
-        .uuid("manager_id")
-        .notNullable()
+        .uuid("user_manager_id")
+        .nullable()
         .references("users.id")
         .onUpdate("CASCADE")
         .onDelete("CASCADE");

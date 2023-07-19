@@ -1,7 +1,9 @@
 export enum TableNames {
   ROLES = "roles",
+  ROLES_ORGANIZATION = "roles_organization",
   USERS = "users",
   ORGANIZATIONS = "organizations",
+  ORGANIZATION_MEMBERS = "organization_members",
   PROJECTS = "projects",
   TEAMS = "teams",
   TASKS = "tasks",
